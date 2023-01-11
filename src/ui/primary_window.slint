@@ -28,21 +28,31 @@ PrimaryWindow := Window {
             background: #444444;
             HorizontalBox {
                 alignment: start;
-                Button { text: "New"; clicked => {PersistantLogic.new_file()}}
-                Button { text: "Open"; clicked => {PersistantLogic.open_file()}}
+                Button { text: "New"; clicked => {
+                    PersistantLogic.new_file();
+                    current_view = 0;
+                    project_ed.text = "";
+                    page_0.sections = OverallLogic.get_all_sections();
+                }}
+                Button { text: "Open"; clicked => {
+                    PersistantLogic.open_file();
+                    current_view = 0;
+                    project_ed.text = "";
+                    page_0.sections = OverallLogic.get_all_sections();
+                }}
                 Button { text: "Save"; clicked => {PersistantLogic.save_file()}}
                 Button { text: "Save As"; clicked => {PersistantLogic.save_as_file()}}
             }
         }
         Rectangle {
-            LineEdit {
+            project_ed := LineEdit {
                 placeholder-text: root.project_title;
                 edited => {PersistantLogic.update_title(text)}
             }
         }
         Rectangle {
             background: #222222;
-            if (current_view) == 0 : OverallPage{}
+            page_0 := OverallPage{}
         }
     }
     

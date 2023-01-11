@@ -5,7 +5,7 @@ use std::{collections::HashMap};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub(crate) struct RootData {
     pub name: String,
-    pub sections: HashMap<i32, Section>
+    sections: HashMap<i32, Section>
 }
 impl RootData {
     pub(crate) fn new() -> Self {
@@ -13,6 +13,10 @@ impl RootData {
             name: String::from("Untitled"),
             sections: HashMap::new(),
         }
+    }
+
+    pub(crate) fn get_sections(&self) -> &HashMap<i32, Section> {
+        &self.sections
     }
 
     pub(crate) fn section_insert(&mut self, name: String) {

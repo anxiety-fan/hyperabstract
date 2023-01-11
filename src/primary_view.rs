@@ -21,6 +21,7 @@ pub fn run() {
         data_ref.replace_with(|_| PrimaryData{file_data: files::HypAbFile::new()});
         app.set_window_title(SharedString::from(data_ref.borrow().file_data.title()));
         app.set_current_view(0);
+        app.set_project_title(SharedString::from(&data_ref.borrow().file_data.map_data.name));
     });
 
     //Open a file specified in dialog and obtain working data from that file
@@ -33,6 +34,7 @@ pub fn run() {
         });
         app.set_window_title(SharedString::from(data_ref.borrow().file_data.title()));
         app.set_current_view(0);
+        app.set_project_title(SharedString::from(&data_ref.borrow().file_data.map_data.name));
     });
 
     //Save working data to working file (if file dne move to save as functionality)
@@ -71,7 +73,7 @@ pub fn run() {
     let data_ref = data.clone();
     app.global::<OverallLogic>().on_create_section(move |section_title| {
         data_ref.borrow_mut().file_data.map_data.section_insert(section_title.to_string());
-        let new_data: Vec<(i32, SharedString)> = data_ref.borrow().file_data.map_data.sections
+        let new_data: Vec<(i32, SharedString)> = data_ref.borrow().file_data.map_data.get_sections()
             .iter().map(|(x, y)| (*x, SharedString::from(&y.name))).collect();
         let model = slint::VecModel::from(new_data);
         slint::ModelRc::new(model)
@@ -79,7 +81,7 @@ pub fn run() {
 
     let data_ref = data.clone();
     app.global::<OverallLogic>().on_get_all_sections(move || {
-        let new_data: Vec<(i32, SharedString)> = data_ref.borrow().file_data.map_data.sections
+        let new_data: Vec<(i32, SharedString)> = data_ref.borrow().file_data.map_data.get_sections()
             .iter().map(|(x, y)| (*x, SharedString::from(&y.name))).collect();
         let model = slint::VecModel::from(new_data);
         slint::ModelRc::new(model)
