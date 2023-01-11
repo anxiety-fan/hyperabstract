@@ -1,0 +1,50 @@
+import { HorizontalBox, VerticalBox, Button, LineEdit, ScrollView} from "std-widgets.slint";
+import {OverallPage, OverallLogic} from "overall_page.slint";
+
+export * from "overall_page.slint";
+
+export global PersistantLogic := {
+    callback new_file;
+    callback open_file;
+    callback save_file;
+    callback save_as_file; 
+    callback update_title(string);
+}
+
+PrimaryWindow := Window { 
+    property<string> window_title: "hyperabstract";
+    title: window_title;
+
+    property<string> project_title;
+
+    property<int> current_view: 0;
+    property<int> section_id;
+    property<int> view_id;
+
+    VerticalBox {
+        spacing: 0;
+        padding: 0;
+        Rectangle {
+            background: #444444;
+            HorizontalBox {
+                alignment: start;
+                Button { text: "New"; clicked => {PersistantLogic.new_file()}}
+                Button { text: "Open"; clicked => {PersistantLogic.open_file()}}
+                Button { text: "Save"; clicked => {PersistantLogic.save_file()}}
+                Button { text: "Save As"; clicked => {PersistantLogic.save_as_file()}}
+            }
+        }
+        Rectangle {
+            LineEdit {
+                placeholder-text: root.project_title;
+                edited => {PersistantLogic.update_title(text)}
+            }
+        }
+        Rectangle {
+            background: #222222;
+            if (current_view) == 0 : OverallPage{}
+        }
+    }
+    
+}
+

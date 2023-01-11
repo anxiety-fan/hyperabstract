@@ -1,0 +1,28 @@
+import {GridBox, ScrollView, HorizontalBox, Button, LineEdit} from "std-widgets.slint";
+
+export global OverallLogic := {
+    callback get_all_sections() -> [{name: string, id: int}];
+    callback view_section(int);
+    callback create_section(string) -> [{name: string, id: int}];
+}
+
+export OverallPage := GridBox {
+    property<[{name: string, id: int}]> sections;
+
+    HorizontalBox {
+        new_sec_txt := LineEdit {
+            accepted => {root.sections = OverallLogic.create_section(text)}
+        }
+        Button {
+            text: "New Section";
+            clicked => {root.sections = OverallLogic.create_section(new-sec-txt.text)}
+        }
+    }
+
+    HorizontalBox {
+        for el in root.sections: Button {
+            text: el.name;
+            clicked => {OverallLogic.view_section(el.id)}
+        }
+    }
+}
